@@ -51,7 +51,7 @@ defmodule Trivia.GameServer do
   @impl true
   def handle_cast({:submit_answer, name, answer}, %Game{players: players} = game) do
     case Enum.find(players, &(&1.name == name)) do
-      player ->
+      %Player{} = player ->
         {:noreply, Game.check_answer(game, player, answer)}
 
       nil ->
