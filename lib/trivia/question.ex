@@ -8,6 +8,6 @@ defmodule Trivia.Question do
     %Question{text: text, options: shuffled_options, answer: answer}
   end
 
-  def valid_answer?(%Question{answer: answer}, guess) when answer == guess1, do: true
+  def valid_answer?(%Question{answer: answer}, guess) when answer == guess, do: true
   def valid_answer?(_question, _guess), do: false
 end
