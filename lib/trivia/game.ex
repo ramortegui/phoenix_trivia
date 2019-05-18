@@ -11,7 +11,7 @@ defmodule Trivia.Game do
   alias Trivia.Question
 
   def new(%{name: name, player: %Player{} = player}) do
-    %Game{name: name, status: 'waiting'}
+    %Game{name: name, status: "waiting"}
     |> add_player(player)
   end
 
@@ -23,23 +23,30 @@ defmodule Trivia.Game do
     %Game{game | questions: [question | questions]}
   end
 
-  def change_status(%Game{status: status, players: players} = game) when status == "waiting" do
+  def change_status(
+        %Game{status: status, players: players, questions: [question | questions]} = game
+      )
+      when status == "waiting" do
     players = Enum.map(players, &%Player{&1 | waiting_response: true})
-    %Game{game | status: "playing", players: players}
+
+    %Game{
+      game
+      | status: "playing",
+        players: players,
+        current_question: question,
+        questions: questions
+    }
   end
 
   def change_status(%Game{status: status, questions: questions} = game)
       when status == "playing" and questions == [] do
     game = add_winners(game)
-    %Game{game | status: "finished"}
+    %Game{game | current_question: nil, status: "finished"}
   end
 
   def change_status(%Game{status: status} = game)
       when status == "playing",
       do: game
-
-  def change_status(%Game{} = game),
-    do: %Game{game | status: "finished"}
 
   def change_question(%Game{status: status, questions: [first | rest], players: players} = game)
       when status == "playing" do
@@ -47,13 +54,13 @@ defmodule Trivia.Game do
     %Game{game | current_question: first, questions: rest, players: players}
   end
 
-  def change_question(game) do
-    change_status(game)
+  def change_question(%Game{} = game) do
+    change_status(%Game{game | current_question: nil})
   end
 
   def check_answer(
         %Game{current_question: current_question} = game,
-        %Player{name: player_name},
+        %Player{name: player_name, waiting_response: true},
         answer
       ) do
     if Question.valid_answer?(current_question, answer) do
@@ -63,10 +70,12 @@ defmodule Trivia.Game do
     end
   end
 
+  def check_answer(%Game{} = game, _player, _answer), do: game
+
   def add_point_to_player(%Game{players: players} = game, player_name) do
     players =
       Enum.map(players, fn player ->
-        if player.name == player_name do
+        if player.name == player_name and player.waiting_response do
           %Player{player | points: player.points + 1, waiting_response: false}
         else
           player
@@ -91,7 +100,7 @@ defmodule Trivia.Game do
 
   def add_winners(%Game{players: players} = game) do
     max_points = Enum.max_by(players, & &1.points)
-    winners = Enum.filter(players, &(&1.points == max_points))
+    winners = Enum.filter(players, &(&1.points == max_points.points))
     %Game{game | winners: winners}
   end
 end
