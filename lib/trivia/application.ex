@@ -9,7 +9,8 @@ defmodule Trivia.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      TriviaWeb.Endpoint
+      TriviaWeb.Endpoint,
+      Trivia.DynamicSupervisor
       # Starts a worker by calling: Trivia.Worker.start_link(arg)
       # {Trivia.Worker, arg},
     ]
