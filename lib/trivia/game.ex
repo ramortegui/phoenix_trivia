@@ -15,6 +15,8 @@ defmodule Trivia.Game do
 
   @waiting_to_subscribe 10
   @waiting_to_question 5
+  @waiting_to_end_game 5
+
   @open_trivia_url "https://opentdb.com/api.php?amount=10&type=multiple"
 
   def new(%{name: name, player: %Player{} = player}) do
@@ -100,7 +102,13 @@ defmodule Trivia.Game do
   def change_status(%Game{status: status} = game)
       when status == "finished" do
     game = add_winners(game)
-    %Game{game | current_question: nil}
+
+    %Game{
+      game
+      | current_question: nil,
+        status: "destroy",
+        counter: @waiting_to_end_game
+    }
   end
 
   def change_status(%Game{status: status} = game)
