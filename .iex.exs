@@ -29,8 +29,8 @@ game = Game.add_question(game, question_2)
 
 {:ok, game_pid} = GameServer.start_link(game)
 
-GameServer.start_game(game_pid)
+# GameServer.start_game(game_pid)
 
-GameServer.add_player(game_pid, player_deisy)
-GameServer.add_player(game_pid, player_sofia)
-GameServer.add_player(game_pid, player_samuel)
+# GameServer.add_player(game_pid, player_deisy)
+# GameServer.add_player(game_pid, player_sofia)
+# GameServer.add_player(game_pid, player_samuel)

@@ -15,9 +15,11 @@ defmodule Trivia.Game do
 
   @waiting_to_subscribe 10
   @waiting_to_question 5
+  @open_trivia_url "https://opentdb.com/api.php?amount=10&type=multiple"
 
   def new(%{name: name, player: %Player{} = player}) do
     %Game{name: name, status: "waiting"}
+    |> get_questions()
     |> add_player(player)
   end
 
@@ -27,6 +29,49 @@ defmodule Trivia.Game do
 
   def add_player(%Game{players: players} = game, %Player{} = player) do
     %Game{game | players: [player | players]}
+  end
+
+  def get_questions(%Game{} = game) do
+    request_questions()
+    |> decode_questions
+    |> parse_questions
+    |> add_questions(game)
+  end
+
+  def request_questions do
+    case HTTPoison.get!(@open_trivia_url) do
+      %{body: body, status_code: 200} ->
+        body
+
+      %{status_bode: 404} ->
+        nil
+    end
+  end
+
+  def decode_questions(body) do
+    case Jason.decode(body) do
+      {:ok, %{"response_code" => 0, "results" => questions}} ->
+        questions
+
+      {:error, _reason} ->
+        []
+    end
+  end
+
+  def parse_questions(raw_questions_list) do
+    Enum.map(raw_questions_list, fn question ->
+      Question.new(%{
+        text: question["question"],
+        options: question["incorrect_answers"],
+        answer: question["correct_answer"]
+      })
+    end)
+  end
+
+  def add_questions(questions, %Game{} = game) do
+    Enum.reduce(questions, game, fn question, acc_game ->
+      add_question(acc_game, question)
+    end)
   end
 
   def add_question(
