@@ -39,8 +39,8 @@ defmodule Trivia.GameServer do
 
   @impl true
   def handle_cast(:start_game, %Game{} = game) do
-    Process.send_after(self(), :change_status, 10_000)
-    {:noreply, game}
+    check_timer(1_000)
+    {:noreply, Game.start_game(game)}
   end
 
   @impl true
@@ -60,26 +60,51 @@ defmodule Trivia.GameServer do
   end
 
   @impl true
-  def handle_info(:change_status, %Game{status: status} = game) when status == "waiting" do
-    Process.send_after(self(), :change_question, 5_000)
+  def handle_info(:change_status, %Game{} = game) do
     {:noreply, Game.change_status(game)}
   end
 
   @impl true
-  def handle_info(:change_status, %Game{status: status} = game) when status == "finished" do
-    {:noreply, Game.change_status(game)}
-  end
-
-  @impl true
-  def handle_info(:change_question, %Game{status: status, questions: []} = game)
-      when status == "playing" do
-    {:noreply, Game.change_status(game)}
-  end
-
-  @impl true
-  def handle_info(:change_question, %Game{status: status} = game)
-      when status == "playing" do
-    Process.send_after(self(), :change_question, 5_000)
+  def handle_info(:change_question, %Game{} = game) do
     {:noreply, Game.change_question(game)}
+  end
+
+  @impl true
+  def handle_info(:check_timer, %Game{status: status} = game)
+      when status == "finished" do
+    {:noreply, game}
+  end
+
+  @impl true
+  def handle_info(:check_timer, %Game{counter: counter} = game)
+      when counter > 0 do
+    check_timer()
+    {:noreply, Game.decrement_counter(game)}
+  end
+
+  @impl true
+  def handle_info(:check_timer, %Game{counter: counter, status: status} = game)
+      when counter <= 0 do
+    game =
+      case status do
+        "waiting" ->
+          Game.change_status(game)
+
+        "playing" ->
+          Game.change_question(game)
+
+        "finished" ->
+          game
+      end
+
+    if(game.status == "playing" or game.status == "finished") do
+      check_timer()
+    end
+
+    {:noreply, game}
+  end
+
+  defp check_timer(time \\ 1000) do
+    Process.send_after(self(), :check_timer, time)
   end
 end
