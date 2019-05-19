@@ -53,7 +53,7 @@ config :trivia, TriviaWeb.Endpoint,
       ~r"priv/gettext/.*(po)$",
       ~r"lib/trivia_web/{live,views}/.*(ex)$",
       ~r"lib/trivia_web/templates/.*(eex)$",
-      ~r{lib/my_app_web/live/.*(ex)$}
+      ~r{lib/trivia_web/live/.*(ex)$}
     ]
   ]
 
