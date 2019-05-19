@@ -13,9 +13,9 @@ defmodule Trivia.Game do
   alias Trivia.Player
   alias Trivia.Question
 
-  @waiting_to_subscribe 10
-  @waiting_to_question 5
-  @waiting_to_end_game 5
+  @waiting_to_subscribe 5
+  @waiting_to_question 3
+  @waiting_to_end_game 2
 
   @open_trivia_url "https://opentdb.com/api.php?amount=10&type=multiple"
 

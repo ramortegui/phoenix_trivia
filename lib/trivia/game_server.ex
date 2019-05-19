@@ -1,5 +1,6 @@
 defmodule Trivia.GameServer do
-  use GenServer
+  use GenServer, restart: :transient
+
   alias Trivia.Game
   alias Trivia.Player
 
@@ -70,12 +71,6 @@ defmodule Trivia.GameServer do
   end
 
   @impl true
-  def handle_info(:check_timer, %Game{status: status} = game)
-      when status == "finished" do
-    {:noreply, game}
-  end
-
-  @impl true
   def handle_info(:check_timer, %Game{counter: counter} = game)
       when counter > 0 do
     check_timer()
@@ -94,12 +89,13 @@ defmodule Trivia.GameServer do
           Game.change_question(game)
 
         "finished" ->
-          game
+          Game.change_status(game)
+
+        "destroy" ->
+          Process.exit(self(), :shutdown)
       end
 
-    if(game.status == "playing" or game.status == "finished") do
-      check_timer()
-    end
+    check_timer()
 
     {:noreply, game}
   end
