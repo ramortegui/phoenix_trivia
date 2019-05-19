@@ -23,6 +23,8 @@ defmodule TriviaWeb do
 
       import Plug.Conn
       import TriviaWeb.Gettext
+      import Phoenix.LiveView.Controller, only: [live_render: 3]
+
       alias TriviaWeb.Router.Helpers, as: Routes
     end
   end
@@ -41,6 +43,8 @@ defmodule TriviaWeb do
 
       import TriviaWeb.ErrorHelpers
       import TriviaWeb.Gettext
+      import Phoenix.LiveView.Controller, only: [live_render: 3]
+
       alias TriviaWeb.Router.Helpers, as: Routes
     end
   end
@@ -50,6 +54,7 @@ defmodule TriviaWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 

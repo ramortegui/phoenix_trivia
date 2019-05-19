@@ -12,7 +12,10 @@ config :trivia, TriviaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "EK47O0QvrRBif5N96Jyfxrs/wPouLdL/Od5Cq4WKFD1cIiG5O7kWuPI7fALhbaSi",
   render_errors: [view: TriviaWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Trivia.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Trivia.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+    signing_salt: "CwLH8jVzXu2hlpointzLPK4R91im3y8dI"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

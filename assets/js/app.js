@@ -15,3 +15,14 @@ import "phoenix_html"
 //
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
+
+import "mdn-polyfills/NodeList.prototype.forEach"
+import "mdn-polyfills/Element.prototype.closest"
+import "mdn-polyfills/Element.prototype.matches"
+import "url-search-params-polyfill"
+import "formdata-polyfill"
+
+import LiveSocket from "phoenix_live_view"
+
+let liveSocket = new LiveSocket("/live")
+liveSocket.connect()
