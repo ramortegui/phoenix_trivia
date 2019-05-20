@@ -8,31 +8,36 @@ defmodule Trivia.TriviaView do
   def render(assigns) do
     ~L"""
     <div class="">
-    <%= if @in_game do %>
-      Status: <%= @trivia.status %> <%= @trivia.counter %>
-      <%= if @trivia.current_question do %>
+      <%= if @in_game do %>
         <div>
-        <%= @trivia.current_question.text %>
+            <button phx-click="return-main">Return</button>
         </div>
         <div>
-        <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %>
-        </div>
-        <div>
-        Options
-        <%= for option <- @trivia.current_question.options do %>
-          <button phx-click="submit_answer" phx-value="<%= option %>"><%= option %></button> <br/>
-        <% end %>
-        </div>
+        Status: <%= @trivia.status %> <%= @trivia.counter %>
+        <%= if @trivia.current_question do %>
+          <div>
+            <%= @trivia.current_question.text %>
+          </div>
+          <div>
+            <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %>
+          </div>
+          <div>
+            Options
+            <div>
+              <%= for option <- @trivia.current_question.options do %>
+                <button phx-click="submit_answer" phx-value="<%= option %>"><%= option %></button> <br/>
+              <% end %>
+            </div>
         </div>
         <% end %>
       <% else %>
-      <div>
-      <button phx-click="create_trivia" phx-value="Ruben">Create + Join</button>
-      Number of trivias: <%= @number_of_trivias %>
-        <%= for trivia <- @available_trivias do %>
-          <button phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
-        <% end %>
-      </div>
+        <div>
+          <button phx-click="create_trivia" phx-value="Ruben">Create + Join</button>
+          Number of trivias: <%= @number_of_trivias %>
+          <%= for trivia <- @available_trivias do %>
+            <button phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
+          <% end %>
+        </div>
       <% end %>
     </div>
     """
@@ -48,7 +53,8 @@ defmodule Trivia.TriviaView do
         trivia: nil,
         process: nil,
         number_of_trivias: 0,
-        available_trivias: []
+        available_trivias: [],
+        display_game: false
       )
 
     {:ok, socket}
@@ -60,42 +66,56 @@ defmodule Trivia.TriviaView do
 
   def update_game_info(socket) do
     game_pid = socket.assigns.process
+    game = socket.assigns.trivia
+    in_game = socket.assigns.in_game
 
-    socket =
-      if is_pid(game_pid) and Process.alive?(game_pid) do
-        socket
-        |> update(:trivia, fn _trivia -> GameServer.game(game_pid) end)
+    if game == nil do
+      trivias(socket)
+    else
+      game = GameServer.game(game_pid)
+
+      if game.status == "destroy" and game.counter == 0 do
+        IO.puts("need to kill")
+        IO.puts(in_game)
+
+        assign(socket, :trivia, nil)
+        |> update(:in_game, fn _ -> false end)
       else
-        socket
+        assign(socket, :trivia, game)
       end
+    end
+  end
 
-    trivias(socket)
+  def old_update_game_info(socket) do
+    game_pid = socket.assigns.process
+
+    if is_pid(game_pid) and Process.alive?(game_pid) do
+      game = GameServer.game(game_pid)
+
+      if game.status == "destroy" do
+        socket
+        |> assign(:in_game, false)
+      else
+        assign(socket, :trivia, game)
+      end
+    else
+      socket
+      |> clean_game()
+      |> trivias()
+    end
   end
 
   def handle_event("create_trivia", value, socket) do
     game = Game.new(%{name: value, player: Player.new(value)})
     {:ok, game_pid} = Trivia.DynamicSupervisor.start_child(game)
     GameServer.start_game(game_pid)
-
-    socket =
-      socket
-      |> assign(:trivia, GameServer.game(game_pid))
-      |> assign(:in_game, true)
-      |> assign(:process, game_pid)
-
-    {:noreply, socket}
+    {:noreply, assign_game(socket, game_pid)}
   end
 
   def handle_event("join_trivia", value, socket) do
     game_pid = Map.get(socket.assigns.available_trivias, String.to_integer(value))
 
-    socket =
-      socket
-      |> assign(:trivia, GameServer.game(game_pid))
-      |> assign(:in_game, true)
-      |> assign(:process, game_pid)
-
-    {:noreply, socket}
+    {:noreply, assign_game(socket, game_pid)}
   end
 
   def handle_event("submit_answer", value, socket) do
@@ -116,6 +136,24 @@ defmodule Trivia.TriviaView do
     {:noreply, socket}
   end
 
+  def handle_event("return-main", _value, socket) do
+    {:noreply, assign(socket, :ingame, false)}
+  end
+
+  def assign_game(socket, game_pid) do
+    socket
+    |> assign(:trivia, GameServer.game(game_pid))
+    |> assign(:process, game_pid)
+    |> assign(:in_game, true)
+  end
+
+  def clean_game(socket) do
+    socket
+    |> assign(:trivia, nil)
+    |> assign(:process, nil)
+    |> assign(:in_game, false)
+  end
+
   def trivias(socket) do
     childs = DynamicSupervisor.which_children(Trivia.DynamicSupervisor)
 
@@ -131,5 +169,6 @@ defmodule Trivia.TriviaView do
     socket
     |> assign(:number_of_trivias, Enum.count(childs))
     |> assign(:available_trivias, available_trivias)
+    |> assign(:in_game, false)
   end
 end
