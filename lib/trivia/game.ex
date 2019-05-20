@@ -31,7 +31,11 @@ defmodule Trivia.Game do
   end
 
   def add_player(%Game{players: players, number_of_players: number_of_players} = game, %Player{} = player) do
-    %Game{game | players: [player | players], number_of_players: number_of_players + 1}
+    if Enum.any?(players,&(&1.name == player.name)) do
+      game
+    else
+      %Game{game | players: [player | players], number_of_players: number_of_players + 1}
+    end
   end
 
   def get_questions(%Game{} = game) do
