@@ -7,7 +7,8 @@ defmodule Trivia.Game do
             winners: [],
             counter: 0,
             total_questions: 0,
-            used_questions: 0
+            used_questions: 0,
+            number_of_players: 0
 
   alias Trivia.Game
   alias Trivia.Player
@@ -29,8 +30,8 @@ defmodule Trivia.Game do
     %Game{game | counter: @waiting_to_subscribe}
   end
 
-  def add_player(%Game{players: players} = game, %Player{} = player) do
-    %Game{game | players: [player | players]}
+  def add_player(%Game{players: players, number_of_players: number_of_players} = game, %Player{} = player) do
+    %Game{game | players: [player | players], number_of_players: number_of_players + 1}
   end
 
   def get_questions(%Game{} = game) do
@@ -106,7 +107,6 @@ defmodule Trivia.Game do
     %Game{
       game
       | current_question: nil,
-        status: "destroy",
         counter: @waiting_to_end_game
     }
   end

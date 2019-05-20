@@ -89,9 +89,6 @@ defmodule Trivia.GameServer do
           Game.change_question(game)
 
         "finished" ->
-          Game.change_status(game)
-
-        "destroy" ->
           Process.exit(self(), :shutdown)
       end
 

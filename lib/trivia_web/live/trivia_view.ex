@@ -10,26 +10,25 @@ defmodule Trivia.TriviaView do
     <div class="">
       <%= if @in_game do %>
         <div>
-            <button phx-click="return-main">Return</button>
-        </div>
-        <div>
-        Status: <%= @trivia.status %> <%= @trivia.counter %>
+        <div><button phx-click="return-main">Back to hall</button></div>
+          <div><h2>Status: <%= @trivia.status %></h2></div>
         <%= if @trivia.current_question do %>
           <div>
-            <%= @trivia.current_question.text %>
+            <h3>Question <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %></h3>
+          </div>
+          <div>Time left: <%= @trivia.counter %> </div>
+          <div>
+            <p><%= Phoenix.HTML.raw @trivia.current_question.text %></p>
           </div>
           <div>
-            <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %>
-          </div>
-          <div>
-            Options
-            <div>
-              <%= for option <- @trivia.current_question.options do %>
-                <button phx-click="submit_answer" phx-value="<%= option %>"><%= option %></button> <br/>
-              <% end %>
-            </div>
+          <%= for option <- @trivia.current_question.options do %>
+          <button phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button> <br/>
+          <% end %>
         </div>
+        <% else %>
+          <div>Time left: <%= @trivia.counter %> </div>
         <% end %>
+        </div>
       <% else %>
         <div>
           <button phx-click="create_trivia" phx-value="Ruben">Create + Join</button>
@@ -53,8 +52,7 @@ defmodule Trivia.TriviaView do
         trivia: nil,
         process: nil,
         number_of_trivias: 0,
-        available_trivias: [],
-        display_game: false
+        available_trivias: []
       )
 
     {:ok, socket}
@@ -67,41 +65,16 @@ defmodule Trivia.TriviaView do
   def update_game_info(socket) do
     game_pid = socket.assigns.process
     game = socket.assigns.trivia
-    in_game = socket.assigns.in_game
 
     if game == nil do
       trivias(socket)
     else
       game = GameServer.game(game_pid)
-
-      if game.status == "destroy" and game.counter == 0 do
-        IO.puts("need to kill")
-        IO.puts(in_game)
-
-        assign(socket, :trivia, nil)
-        |> update(:in_game, fn _ -> false end)
+      if game.status == "finished" and game.counter == 0 do
+        clean_game(socket)
       else
         assign(socket, :trivia, game)
       end
-    end
-  end
-
-  def old_update_game_info(socket) do
-    game_pid = socket.assigns.process
-
-    if is_pid(game_pid) and Process.alive?(game_pid) do
-      game = GameServer.game(game_pid)
-
-      if game.status == "destroy" do
-        socket
-        |> assign(:in_game, false)
-      else
-        assign(socket, :trivia, game)
-      end
-    else
-      socket
-      |> clean_game()
-      |> trivias()
     end
   end
 
@@ -137,7 +110,10 @@ defmodule Trivia.TriviaView do
   end
 
   def handle_event("return-main", _value, socket) do
-    {:noreply, assign(socket, :ingame, false)}
+    socket = socket
+             |> assign(:in_game, false)
+             |> trivias()
+    {:noreply, socket}
   end
 
   def assign_game(socket, game_pid) do
