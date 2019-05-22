@@ -6,6 +6,7 @@ defmodule Trivia.Game do
             status: '',
             winners: [],
             counter: 0,
+            counter_total: 0,
             total_questions: 0,
             used_questions: 0,
             number_of_players: 0
@@ -27,7 +28,7 @@ defmodule Trivia.Game do
   end
 
   def start_game(%Game{} = game) do
-    %Game{game | counter: @waiting_to_subscribe}
+    %Game{game | counter: @waiting_to_subscribe, counter_total: @waiting_to_subscribe}
   end
 
   def add_player(%Game{players: players, number_of_players: number_of_players} = game, %Player{} = player) do
@@ -100,7 +101,8 @@ defmodule Trivia.Game do
         players: players,
         current_question: question,
         questions: questions,
-        counter: @waiting_to_question
+        counter: @waiting_to_question,
+        counter_total: @waiting_to_question,
     }
   end
 
@@ -111,7 +113,8 @@ defmodule Trivia.Game do
     %Game{
       game
       | current_question: nil,
-        counter: @waiting_to_end_game
+        counter: @waiting_to_end_game,
+        counter_total: @waiting_to_end_game
     }
   end
 
@@ -136,6 +139,7 @@ defmodule Trivia.Game do
         questions: rest,
         players: players,
         counter: @waiting_to_question,
+        counter_total: @waiting_to_question,
         used_questions: used_questions + 1
     }
   end
@@ -146,6 +150,7 @@ defmodule Trivia.Game do
       game
       | current_question: nil,
         counter: 0,
+        counter_total: 0,
         used_questions: used_questions + 1,
         status: "finished"
     })

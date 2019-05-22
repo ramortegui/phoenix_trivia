@@ -7,7 +7,7 @@ defmodule Trivia.TriviaView do
 
   def render(assigns) do
     ~L"""
-    <div class="">
+    <div class="section">
     <h1>Name: <%= @player_name %></h1>
       <%= if @in_game do %>
         <div>
@@ -32,25 +32,29 @@ defmodule Trivia.TriviaView do
           <div>
             <h3>Question <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %></h3>
           </div>
-          <div>Time left: <%= @trivia.counter %> </div>
+          <div><progress id="progress-bar" class="progress is-info"  value="<%= @trivia.counter %>" max="<%= @trivia.counter_total %>"></progress></div>
           <div>
             <p><%= Phoenix.HTML.raw @trivia.current_question.text %></p>
           </div>
           <div>
           <%= for option <- @trivia.current_question.options do %>
-          <button phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button> <br/>
+          <div class="column">
+          <button class="button is-info" phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button>
+          </div>
           <% end %>
         </div>
         <% else %>
-          <div>Time left: <%= @trivia.counter %> </div>
+          <div>
+          <progress id="progress-bar" class="progress is-info is-large" value="<%= @trivia.counter %>" max="<%= @trivia.counter_total %>"></progress>
+          </div>
         <% end %>
         </div>
       <% else %>
         <div>
-          <button phx-click="create_trivia" phx-value="<%= @player_name %>">Create + Join</button>
+          <button class="button is-info" phx-click="create_trivia" phx-value="<%= @player_name %>">Create + Join</button>
           Number of trivias: <%= @number_of_trivias %>
           <%= for trivia <- @available_trivias do %>
-            <button phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
+            <button class="button is-info" phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
           <% end %>
         </div>
       <% end %>
@@ -59,7 +63,7 @@ defmodule Trivia.TriviaView do
   end
 
   def mount(_session, socket) do
-    if(connected?(socket), do: :timer.send_interval(100, self(), :tick))
+    if(connected?(socket), do: :timer.send_interval(10, self(), :tick))
 
     player_name = "player_#{:rand.uniform(10000000)}"
 
