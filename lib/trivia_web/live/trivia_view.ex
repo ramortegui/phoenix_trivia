@@ -6,60 +6,8 @@ defmodule Trivia.TriviaView do
   alias Trivia.GameServer
 
   def render(assigns) do
-    ~L"""
-    <div class="section">
-    <h1>Name: <%= @player_name %></h1>
-      <%= if @in_game do %>
-        <div>
-        <div><h2>Status: <%= @trivia.status %></h2></div>
+    TriviaWeb.PageView.render("trivia.html", assigns)
 
-        <%= if (@trivia_status == "playing") do %>
-          <ul>
-            <%= for player <- @trivia.players do %>
-              <li><%= player.name %> - points: <%= player.points %></li>
-            <% end %>
-          </ul>
-        <% end %>
-        <%= if (@trivia_status == "finished") do %>
-          <h2>Winners</h2>
-          <ul>
-            <%= for winner <- @trivia.winners do %>
-              <li><%= winner.name %></li>
-            <% end %>
-          </ul>
-        <% end %>
-        <%= if @trivia.current_question do %>
-          <div>
-            <h3>Question <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %></h3>
-          </div>
-          <div><progress id="progress-bar" class="progress is-info"  value="<%= @trivia.counter %>" max="<%= @trivia.counter_total %>"></progress></div>
-          <div>
-            <p><%= Phoenix.HTML.raw @trivia.current_question.text %></p>
-          </div>
-          <div>
-          <%= for option <- @trivia.current_question.options do %>
-          <div class="column">
-          <button class="button is-info" phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button>
-          </div>
-          <% end %>
-        </div>
-        <% else %>
-          <div>
-          <progress id="progress-bar" class="progress is-info is-large" value="<%= @trivia.counter %>" max="<%= @trivia.counter_total %>"></progress>
-          </div>
-        <% end %>
-        </div>
-      <% else %>
-        <div>
-          <button class="button is-info" phx-click="create_trivia" phx-value="<%= @player_name %>">Create + Join</button>
-          Number of trivias: <%= @number_of_trivias %>
-          <%= for trivia <- @available_trivias do %>
-            <button class="button is-info" phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-    """
   end
 
   def mount(_session, socket) do
