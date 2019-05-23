@@ -30,11 +30,11 @@ The process to build this app in summary was divided in 6 steps:
 
 My game, my rules! :D.  It's a basic trivia, so don't expect far from asking some question and checking answers :)
 
-Trivia is getting questions from [Trivia API](`https://opentdb.com/api_config.php`) and uses websockets so any new socket connection like the refresh of the page will generate a temporal user that will live as the websocket lives.
+Trivia is getting questions from [`Trivia API`](https://opentdb.com/api_config.php) and uses websockets so any new socket connection like the refresh of the page will generate a temporal user that will live as the websocket lives.
 
 Trivia app is reactive, but I only use javascript to load a predefined libraries and config the app. :D.  [`https://github.com/phoenixframework/phoenix_live_view`](https://github.com/phoenixframework/phoenix_live_view) it's awesome!
 
-The application has been deployed in [`https://www.gigalixir.com/`](gigalixir) and can be
+The application has been deployed in [`gigalixir`](https://www.gigalixir.com/) and can be
 found at: [`https://idiotic-hearty-davidstiger.gigalixirapp.com/`](https://idiotic-hearty-davidstiger.gigalixirapp.com/)
 
 Trivia 
