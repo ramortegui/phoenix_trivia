@@ -24,7 +24,8 @@ defmodule Trivia.TriviaView do
         trivia_status: nil,
         number_of_trivias: 0,
         available_trivias: [],
-        player_name:  player_name
+        player_name:  player_name,
+        player_info: nil
       )
 
     {:ok, socket}
@@ -45,9 +46,12 @@ defmodule Trivia.TriviaView do
       if game.status == "finished" and game.counter == 0 do
         clean_game(socket)
       else
+
         socket
         |> assign(:trivia, game)
         |> assign(:trivia_status, game.status)
+        |> player_info()
+
       end
     end
   end
@@ -78,6 +82,7 @@ defmodule Trivia.TriviaView do
           GameServer.submit_answer(game_pid, player_name, value)
           GameServer.game(game_pid)
         end)
+        |> player_info()
       else
         socket
         |> assign(:in_game, false)
@@ -98,6 +103,7 @@ defmodule Trivia.TriviaView do
     |> assign(:trivia, GameServer.game(game_pid))
     |> assign(:process, game_pid)
     |> assign(:in_game, true)
+    |> player_info()
   end
 
   def clean_game(socket) do
@@ -105,6 +111,7 @@ defmodule Trivia.TriviaView do
     |> assign(:trivia, nil)
     |> assign(:process, nil)
     |> assign(:in_game, false)
+    |> assign(:player_info, nil)
   end
 
   def trivias(socket) do
@@ -123,5 +130,11 @@ defmodule Trivia.TriviaView do
     |> assign(:number_of_trivias, Enum.count(childs))
     |> assign(:available_trivias, available_trivias)
     |> assign(:in_game, false)
+  end
+
+  defp player_info(socket) do
+    player_name = socket.assigns.player_name
+    player_info = Enum.find(socket.assigns.trivia.players, &(&1.name == player_name))
+    assign(socket, :player_info, player_info)
   end
 end

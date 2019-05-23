@@ -19,8 +19,8 @@
       <% end %>
     </ul>
     <% end %>
-    <%= if @trivia.current_question do %>
-    <div>
+    <%= if @trivia.current_question && @player_info.waiting_response do %>
+    <div >
       <h3>Question <%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %></h3>
     </div>
     <div><progress id="progress-bar" class="progress is-info"  value="<%= @trivia.counter %>" max="<%= @trivia.counter_total %>"></progress></div>
