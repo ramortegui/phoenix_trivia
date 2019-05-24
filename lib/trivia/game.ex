@@ -16,10 +16,11 @@ defmodule Trivia.Game do
   alias Trivia.Question
 
   @waiting_to_subscribe 10
-  @waiting_to_question 5
+  @waiting_to_question 15
   @waiting_to_end_game 5
+  @amount_of_questions 5
 
-  @open_trivia_url "https://opentdb.com/api.php?amount=10&type=multiple"
+  @open_trivia_url "https://opentdb.com/api.php?amount=#{@amount_of_questions}&type=multiple"
 
   def new(%{name: name, player: %Player{} = player}) do
     %Game{name: name, status: "waiting"}
@@ -31,8 +32,11 @@ defmodule Trivia.Game do
     %Game{game | counter: @waiting_to_subscribe, counter_total: @waiting_to_subscribe}
   end
 
-  def add_player(%Game{players: players, number_of_players: number_of_players} = game, %Player{} = player) do
-    if Enum.any?(players,&(&1.name == player.name)) do
+  def add_player(
+        %Game{players: players, number_of_players: number_of_players} = game,
+        %Player{} = player
+      ) do
+    if Enum.any?(players, &(&1.name == player.name)) do
       game
     else
       %Game{game | players: [player | players], number_of_players: number_of_players + 1}
@@ -41,8 +45,8 @@ defmodule Trivia.Game do
 
   def get_questions(%Game{} = game) do
     request_questions()
-    |> decode_questions
-    |> parse_questions
+    |> decode_questions()
+    |> parse_questions()
     |> add_questions(game)
   end
 
@@ -102,7 +106,7 @@ defmodule Trivia.Game do
         current_question: question,
         questions: questions,
         counter: @waiting_to_question,
-        counter_total: @waiting_to_question,
+        counter_total: @waiting_to_question
     }
   end
 
@@ -184,12 +188,13 @@ defmodule Trivia.Game do
         end
       end)
 
-    %Game{game | players: players}
+    %Game{game | players: sorted_players(players)}
   end
 
   def advance_question_for_user(%Game{players: players} = game, player_name) do
     players =
-      Enum.map(players, fn player ->
+      players
+      |> Enum.map(fn player ->
         if player.name == player_name do
           %Player{player | waiting_response: false}
         else
@@ -202,7 +207,17 @@ defmodule Trivia.Game do
 
   def add_winners(%Game{players: players} = game) do
     max_points = Enum.max_by(players, & &1.points)
-    winners = Enum.filter(players, &(&1.points == max_points.points))
+
+    winners =
+      players
+      |> Enum.filter(&(&1.points == max_points.points))
+      |> sorted_players()
+
     %Game{game | winners: winners}
+  end
+
+  defp sorted_players(players) when is_list(players) do
+    players
+    |> Enum.sort(&(&1.points >= &2.points))
   end
 end
