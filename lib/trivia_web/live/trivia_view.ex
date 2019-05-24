@@ -126,12 +126,13 @@ defmodule Trivia.TriviaView do
       |> Enum.map(fn {value, index} ->
         {_, pid, _, _} = value
         game = GameServer.game(pid)
-        case game.status  do
+
+        case game.status do
           "waiting" -> {index, pid}
-           _ -> {index, nil}
+          _ -> {index, nil}
         end
       end)
-      |> Enum.filter(fn({index, pid}) -> pid != nil end)
+      |> Enum.filter(fn {_index, pid} -> pid != nil end)
       |> Map.new()
 
     socket
