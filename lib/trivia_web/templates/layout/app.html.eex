@@ -16,6 +16,12 @@
       </section>
     </header>
     <main role="main" class="container">
+    <div class="columns">
+      <div class="column">
+        <a
+             href="https://github.com/ramortegui/phoenix_trivia" target="_blank">https://github.com/ramortegui/phoenix_trivia</a>
+      </div>
+    </div>
       <%= render @view_module, @view_template, assigns %>
     </main>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
