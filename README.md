@@ -35,7 +35,7 @@ Trivia is getting questions from [`Trivia API`](https://opentdb.com/api_config.p
 Trivia app is reactive, but I only use javascript to load a predefined libraries and config the app. :D.  [`https://github.com/phoenixframework/phoenix_live_view`](https://github.com/phoenixframework/phoenix_live_view) it's awesome!
 
 The application has been deployed in [`gigalixir`](https://www.gigalixir.com/) and can be
-found at: [`https://idiotic-hearty-davidstiger.gigalixirapp.com/`](https://idiotic-hearty-davidstiger.gigalixirapp.com/)
+found at: [`https://phx-trivia.gigalixirapp.com/`](https://phx-trivia.gigalixirapp.com/)
 
 Trivia 
 
