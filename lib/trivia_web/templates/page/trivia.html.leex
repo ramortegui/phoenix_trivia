@@ -66,9 +66,12 @@
       </div>
       <div class="columns">
         <div class="column">
+          <ol>
           <%= for question <- @trivia.questions_with_answers do  %>
-            <p><%= question.text %> : <%= question.answer %></p>
+            <li><%= Phoenix.HTML.raw question.text %> : <strong><%=
+Phoenix.HTML.raw question.answer %></strong></li>
           <% end %>
+          </ol>
         </div>
       </div>
     <% end %>

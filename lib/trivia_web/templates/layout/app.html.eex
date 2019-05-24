@@ -18,8 +18,13 @@
     <main role="main" class="container">
     <div class="columns">
       <div class="column">
-        <a
-             href="https://github.com/ramortegui/phoenix_trivia" target="_blank">https://github.com/ramortegui/phoenix_trivia</a>
+        <a href="https://github.com/ramortegui/phoenix_trivia" target="_blank">
+          <img class="icon" src="<%= Routes.static_path(@conn, "/images/Octocat.png") %>" alt="Phoenix Framework Logo"/><span>Github</span></a>
+      </div>
+      <div class="column">
+        <span>
+        Questions by: <a href="https://opentdb.com/" target="_blank">Open Trivia</a>
+        </span>
       </div>
     </div>
       <%= render @view_module, @view_template, assigns %>
