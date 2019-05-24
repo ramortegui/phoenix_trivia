@@ -22,6 +22,7 @@ defmodule Trivia.TriviaView do
         process: nil,
         trivia_status: nil,
         number_of_trivias: 0,
+        number_of_available_trivias: 0,
         available_trivias: [],
         player_name: player_name,
         player_info: nil
@@ -105,7 +106,6 @@ defmodule Trivia.TriviaView do
     |> assign(:process, game_pid)
     |> assign(:in_game, true)
     |> player_info()
-    |> trivias()
   end
 
   def clean_game(socket) do
@@ -125,12 +125,18 @@ defmodule Trivia.TriviaView do
       |> Enum.with_index()
       |> Enum.map(fn {value, index} ->
         {_, pid, _, _} = value
-        {index, pid}
+        game = GameServer.game(pid)
+        case game.status  do
+          "waiting" -> {index, pid}
+           _ -> {index, nil}
+        end
       end)
+      |> Enum.filter(fn({index, pid}) -> pid != nil end)
       |> Map.new()
 
     socket
     |> assign(:number_of_trivias, Enum.count(childs))
+    |> assign(:number_of_available_trivias, Enum.count(available_trivias))
     |> assign(:available_trivias, available_trivias)
   end
 

@@ -1,4 +1,10 @@
-<div class="section">
+
+<div class="container">
+  <div class="columns">
+    <div class="column">
+      <p class="title">Player: <%= @player_name %></p>
+    </div>
+  </div>
   <%= if @trivia do %>
     <div class="columns">
       <div class="column">
@@ -6,9 +12,6 @@
       </div>
     </div>
   <% end %>
-  <div class="columns">
-    <p class="title">Player: <%= @player_name %></p>
-  </div>
   <%= if @in_game do %>
     <div class="columns">
       <p class="subtitle">Status: <%= @trivia.status %></p>
@@ -17,7 +20,9 @@
       <%= if @trivia.current_question do %>
         <div class="columns">
           <div class="column">
-            <p class="subtitle is-2"><%= @trivia.used_questions+1 %>/<%= @trivia.total_questions %> - <%= Phoenix.HTML.raw @trivia.current_question.text %></p>
+            <p><strong><%= @trivia.used_questions+1 %>/<%=
+               @trivia.total_questions %></strong>
+            <%= Phoenix.HTML.raw @trivia.current_question.text %></p>
           </div>
         </div>
         <%= if @player_info.waiting_response do %>
@@ -59,7 +64,8 @@
         <button class="button is-info" phx-click="create_trivia" phx-value="<%= @player_name %>">Create + Join</button>
       </div>
       <div class="column">
-        <p>Number of trivias: <%= @number_of_trivias %></p>
+        <p>Trivias running at this moment: <%= @number_of_trivias %></p>
+        <p>Trivias available to join: <%= @number_of_available_trivias %></p>
       </div>
     </div>
     <div class="columns">
