@@ -19,8 +19,11 @@ defmodule Trivia.Game do
   @waiting_to_question 15
   @waiting_to_end_game 5
   @amount_of_questions 5
+  @category 18
 
-  @open_trivia_url "https://opentdb.com/api.php?amount=#{@amount_of_questions}&type=multiple"
+  @open_trivia_url "https://opentdb.com/api.php?amount=#{@amount_of_questions}&category=#{
+                     @category
+                   }&type=multiple"
 
   def new(%{name: name, player: %Player{} = player}) do
     %Game{name: name, status: "waiting"}
