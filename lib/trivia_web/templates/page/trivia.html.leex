@@ -2,7 +2,7 @@
 <div class="container">
   <div class="columns">
     <div class="column">
-      <p class="title">Player: <%= @player_name %></p>
+      <p class="subtitle">Player: <%= @player_name %></p>
     </div>
   </div>
   <%= if @trivia do %>
@@ -14,7 +14,9 @@
   <% end %>
   <%= if @in_game do %>
     <div class="columns">
-      <p class="subtitle">Status: <%= @trivia.status %></p>
+      <div class="column">
+        <p class="subtitle">Status: <%= @trivia.status %></p>
+      </div>
     </div>
     <%= if (@trivia_status == "playing") do %>
       <%= if @trivia.current_question do %>
@@ -29,14 +31,16 @@
           <%= for option <- @trivia.current_question.options do %>
             <div class="columns">
               <div class="column">
-                <button class="button is-info is-small" phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button>
+                <button class="button is-primary is-small" phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button>
               </div>
             </div>
           <% end %>
         <% end %>
       <% end %>
       <div class="columns">
-        <p class="subtitle is-4">Positions</p>
+        <div class="column">
+          <p class="tag is-warning">Positions</p>
+        </div>
       </div>
       <%= for player <- @trivia.players do %>
         <div class="columns">
@@ -48,7 +52,7 @@
     <% end %>
     <%= if (@trivia_status == "finished") do %>
       <div class="columns">
-        <p class="subtitle is-2">Winners</p>
+        <p class="tag is-success">Winners</p>
       </div>
       <%= for player <- @trivia.winners do %>
         <div class="columns">
@@ -57,8 +61,19 @@
           </div>
         </div>
       <% end %>
+      <div class="columns">
+        <p class="tag is-success">Q/A</p>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <%= for question <- @trivia.questions_with_answers do  %>
+            <p><%= question.text %> : <%= question.answer %></p>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-  <% else %>
+  <% end %>
+  <%= if @in_game == false do %>
     <div class="columns">
       <div class="column">
         <button class="button is-info" phx-click="create_trivia" phx-value="<%= @player_name %>">Create + Join</button>

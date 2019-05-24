@@ -26,11 +26,15 @@ The process to build this app in summary was divided in 6 steps:
 
 "test everything!!!, improve UI, Refactor, etc.etc.  The main goal was to use live view, and it has been  accomplished"
 
+## About the game
+
+Trivia is getting 5 Computer/IT questions from [`Trivia API`](https://opentdb.com/api_config.php),
+the players can join to other trivias on the waiting period.
+On the botton you can see the positions.  The player(s) with the higher score
+win the game.
+
 ## About the app
 
-My game, my rules! :D.  It's a basic trivia, so don't expect far from asking some question and checking answers :)
-
-Trivia is getting questions from [`Trivia API`](https://opentdb.com/api_config.php) and uses websockets so any new socket connection like the refresh of the page will generate a temporal user that will live as the websocket lives.
 
 Trivia app is reactive, but I only use javascript to load a predefined libraries and config the app. :D.  [`https://github.com/phoenixframework/phoenix_live_view`](https://github.com/phoenixframework/phoenix_live_view) it's awesome!
 
@@ -39,8 +43,10 @@ found at: [`https://phx-trivia.gigalixirapp.com/`](https://phx-trivia.gigalixira
 
 Trivia 
 
-To start your Phoenix server:
+To start your Phoenix server locally:
 
+  * Have elixir installed :)
+  * Clone the repo with `git clone https://github.com/ramortegui/phoenix_trivia`
   * Install dependencies with `mix deps.get`
   * Install Node.js dependencies with `npm install --prefix assets`
   * Start Phoenix endpoint with `mix phx.server`

@@ -2,6 +2,7 @@ defmodule Trivia.Game do
   defstruct name: '',
             current_question: nil,
             questions: [],
+            questions_with_answers: [],
             players: [],
             status: '',
             winners: [],
@@ -51,6 +52,7 @@ defmodule Trivia.Game do
     |> decode_questions()
     |> parse_questions()
     |> add_questions(game)
+    |> set_questions_with_answers()
   end
 
   def request_questions do
@@ -94,6 +96,10 @@ defmodule Trivia.Game do
         %Question{} = question
       ) do
     %Game{game | questions: [question | questions], total_questions: total_questions + 1}
+  end
+
+  def set_questions_with_answers(%Game{questions: questions} = game) do
+    %Game{game | questions_with_answers: questions}
   end
 
   def change_status(
