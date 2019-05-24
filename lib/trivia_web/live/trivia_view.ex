@@ -7,13 +7,12 @@ defmodule Trivia.TriviaView do
 
   def render(assigns) do
     TriviaWeb.PageView.render("trivia.html", assigns)
-
   end
 
   def mount(_session, socket) do
-    if(connected?(socket), do: :timer.send_interval(10, self(), :tick))
+    if(connected?(socket), do: :timer.send_interval(5, self(), :tick))
 
-    player_name = "player_#{:rand.uniform(10000000)}"
+    player_name = "p_#{:rand.uniform(10_000_000_000)}"
 
     socket =
       socket
@@ -24,7 +23,7 @@ defmodule Trivia.TriviaView do
         trivia_status: nil,
         number_of_trivias: 0,
         available_trivias: [],
-        player_name:  player_name,
+        player_name: player_name,
         player_info: nil
       )
 
@@ -43,15 +42,15 @@ defmodule Trivia.TriviaView do
       trivias(socket)
     else
       game = GameServer.game(game_pid)
+
       if game.status == "finished" and game.counter == 0 do
         clean_game(socket)
       else
-
         socket
+        |> trivias()
         |> assign(:trivia, game)
         |> assign(:trivia_status, game.status)
         |> player_info()
-
       end
     end
   end
@@ -67,7 +66,7 @@ defmodule Trivia.TriviaView do
   def handle_event("join_trivia", value, socket) do
     game_pid = Map.get(socket.assigns.available_trivias, String.to_integer(value))
     player_name = socket.assigns.player_name
-    GameServer.add_player(game_pid, Player.new(player_name))
+    GameServer.add_player(game_pid, %Player{Player.new(player_name) | waiting_response: true})
     {:noreply, assign_game(socket, game_pid)}
   end
 
@@ -92,9 +91,11 @@ defmodule Trivia.TriviaView do
   end
 
   def handle_event("return-main", _value, socket) do
-    socket = socket
-             |> assign(:in_game, false)
-             |> trivias()
+    socket =
+      socket
+      |> assign(:in_game, false)
+      |> trivias()
+
     {:noreply, socket}
   end
 
@@ -104,6 +105,7 @@ defmodule Trivia.TriviaView do
     |> assign(:process, game_pid)
     |> assign(:in_game, true)
     |> player_info()
+    |> trivias()
   end
 
   def clean_game(socket) do
@@ -112,6 +114,7 @@ defmodule Trivia.TriviaView do
     |> assign(:process, nil)
     |> assign(:in_game, false)
     |> assign(:player_info, nil)
+    |> trivias()
   end
 
   def trivias(socket) do
@@ -129,7 +132,6 @@ defmodule Trivia.TriviaView do
     socket
     |> assign(:number_of_trivias, Enum.count(childs))
     |> assign(:available_trivias, available_trivias)
-    |> assign(:in_game, false)
   end
 
   defp player_info(socket) do
