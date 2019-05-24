@@ -41,8 +41,6 @@ Trivia app is reactive, but I only use javascript to load a predefined libraries
 The application has been deployed in [`gigalixir`](https://www.gigalixir.com/) and can be
 found at: [`https://phx-trivia.gigalixirapp.com/`](https://phx-trivia.gigalixirapp.com/)
 
-Trivia 
-
 To start your Phoenix server locally:
 
   * Have elixir installed :)
