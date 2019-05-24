@@ -18,7 +18,7 @@ defmodule Trivia.Game do
 
   @waiting_to_subscribe 10
   @waiting_to_question 15
-  @waiting_to_end_game 5
+  @waiting_to_end_game 10
   @amount_of_questions 5
   @category 18
 
