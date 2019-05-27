@@ -1,4 +1,4 @@
-defmodule Trivia.TriviaView do
+defmodule TriviaWeb.Live.TriviaView do
   use Phoenix.LiveView
 
   alias Trivia.Game

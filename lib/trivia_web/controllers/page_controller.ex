@@ -4,6 +4,6 @@ defmodule TriviaWeb.PageController do
   alias Phoenix.LiveView
 
   def index(conn, _params) do
-    LiveView.Controller.live_render(conn, Trivia.TriviaView, session: %{})
+    LiveView.Controller.live_render(conn, TriviaWeb.Live.TriviaView, session: %{})
   end
 end
