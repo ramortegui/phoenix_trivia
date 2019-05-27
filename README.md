@@ -1,8 +1,9 @@
 # Trivia
 
-Trivia is an experiment with Phoenix LiveView.
+Trivia is an experiment with Phoenix LiveView.  [https://phx-trivia.gigalixirapp.com/](https://phx-trivia.gigalixirapp.com/).
 
-[trivia screenshot](assets/static/images/phx-trivia.png)
+
+![trivia screenshot](assets/static/images/phx-trivia.png)
 
 ## Architecture
 
@@ -26,7 +27,7 @@ The process to build this app in summary was divided in 6 steps:
 
 ## TODO
 
-"test everything!!!, improve UI, Refactor, etc.etc.  The main goal was to use live view, and it has been  accomplished"
+"test everything!!!, improve UI, Refactor code, etc.etc.  The main goal was to use live view, and it has been accomplished"
 
 ## About the game
 
