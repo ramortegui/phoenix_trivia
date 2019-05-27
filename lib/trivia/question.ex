@@ -1,4 +1,7 @@
 defmodule Trivia.Question do
+  @moduledoc """
+  Define question structure and validations.
+  """
   defstruct text: "", options: [], answer: ''
 
   alias Trivia.Question
