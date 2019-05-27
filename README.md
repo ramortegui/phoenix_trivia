@@ -2,6 +2,8 @@
 
 Trivia is an experiment with Phoenix LiveView.
 
+[trivia screenshot](assets/static/images/phx-trivia.png)
+
 ## Architecture
 
 The process to build this app in summary was divided in 6 steps:
