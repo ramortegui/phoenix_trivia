@@ -34,8 +34,9 @@ The process to build this app in summary was divided in 6 steps:
 
 Trivia is getting 5 Computer/IT questions from [`Trivia API`](https://opentdb.com/api_config.php),
 the players can join to other trivias on the waiting period.
-On the botton you can see the positions.  The player(s) with the higher score
-win the game.
+On the bottom of the page are diplayed the point and positions of the players during the game.
+
+The player(s) with the higher score are the winners of the game.
 
 ## About the app
 
