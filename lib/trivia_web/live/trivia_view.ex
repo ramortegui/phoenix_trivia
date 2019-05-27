@@ -2,8 +2,8 @@ defmodule Trivia.TriviaView do
   use Phoenix.LiveView
 
   alias Trivia.Game
-  alias Trivia.Player
   alias Trivia.GameServer
+  alias Trivia.Player
 
   def render(assigns) do
     TriviaWeb.PageView.render("trivia.html", assigns)

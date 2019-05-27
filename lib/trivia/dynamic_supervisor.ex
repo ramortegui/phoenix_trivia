@@ -1,4 +1,7 @@
 defmodule Trivia.DynamicSupervisor do
+  @moduledoc """
+  Dynamic supervisor used to create trivia games on demand.
+  """
   use DynamicSupervisor
 
   alias Trivia.Game

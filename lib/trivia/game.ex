@@ -1,4 +1,7 @@
 defmodule Trivia.Game do
+  @moduledoc """
+  Business logic to operate a trivia game.
+  """
   defstruct name: '',
             current_question: nil,
             questions: [],

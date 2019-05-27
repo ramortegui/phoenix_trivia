@@ -1,4 +1,7 @@
 defmodule Trivia.GameServer do
+  @moduledoc """
+  Maintain and control timer and messages for processes managing trivias.
+  """
   use GenServer, restart: :transient
 
   alias Trivia.Game

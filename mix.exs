@@ -33,6 +33,7 @@ defmodule Trivia.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.5.1"},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:phoenix, "~> 1.4.6"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},
