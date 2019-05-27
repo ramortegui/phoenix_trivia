@@ -43,7 +43,7 @@ defmodule Trivia.GameServer do
 
   @impl true
   def handle_cast(:start_game, %Game{} = game) do
-    check_timer(1_000)
+    check_timer()
     {:noreply, Game.start_game(game)}
   end
 
