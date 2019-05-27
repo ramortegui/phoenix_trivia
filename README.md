@@ -1,4 +1,5 @@
 # Trivia
+[![Build Status](https://travis-ci.com/ramortegui/phoenix_trivia.svg?branch=master)](https://travis-ci.com/ramortegui/phoenix_trivia)
 
 Trivia is an experiment with Phoenix LiveView.  [https://phx-trivia.gigalixirapp.com/](https://phx-trivia.gigalixirapp.com/).
 
