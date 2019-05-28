@@ -6,7 +6,7 @@ defmodule Trivia.Player do
   alias Trivia.Player
 
   @doc """
-  Returns a `Trivial.Player` Struct with the name populated.
+  Returns a `Trivia.Player` Struct with the name populated.
 
   ## Examples:
 
