@@ -5,7 +5,16 @@ defmodule Trivia.Player do
   defstruct name: '', points: 0, waiting_response: false
   alias Trivia.Player
 
-  def new(name) do
+  @doc """
+  Returns a `Trivial.Player` Struct with the name populated.
+
+  ## Examples:
+
+      iex> Trivia.Player.new("Ruben")
+      %Trivia.Player{name: "Ruben", points: 0, waiting_response: false}
+
+  """
+  def new(name) when is_binary(name) do
     %Player{name: name}
   end
 end
