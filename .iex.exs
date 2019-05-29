@@ -34,3 +34,13 @@ game = Game.add_question(game, question_2)
 # GameServer.add_player(game_pid, player_deisy)
 # GameServer.add_player(game_pid, player_sofia)
 # GameServer.add_player(game_pid, player_samuel)
+#
+#
+#
+
+start_servers = fn quantity ->
+  Enum.each(1..quantity, fn x ->
+    {:ok, pid} = Trivia.DynamicSupervisor.start_child(game)
+    GameServer.start_game(pid)
+  end)
+end
