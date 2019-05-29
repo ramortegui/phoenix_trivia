@@ -6,6 +6,9 @@ defmodule Trivia.Question do
 
   alias Trivia.Question
 
+  @doc """
+  Returns a `Trivia.Question` Struct with shuffled options, the answer is included as part of the options.
+  """
   def new(%{text: text, options: options, answer: answer}) do
     shuffled_options = Enum.shuffle([answer | options])
     %Question{text: text, options: shuffled_options, answer: answer}
