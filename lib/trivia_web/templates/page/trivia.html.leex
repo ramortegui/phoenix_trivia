@@ -85,9 +85,11 @@ Phoenix.HTML.raw question.answer %></strong></li>
         <p>Trivias available to join: <%= @number_of_available_trivias %></p>
       </div>
     </div>
-    <div class="columns">
+    <div class="columns is-multiline is-mobile">
       <%= for trivia <- @available_trivias do %>
-        <div class="column"><button class="button is-info" phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button></div>
+        <div class="column is-one-fifth">
+          <button class="button is-info" phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
+        </div>
       <% end %>
     </div>
   <% end %>
