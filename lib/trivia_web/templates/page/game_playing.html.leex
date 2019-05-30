@@ -1,0 +1,13 @@
+<%= TriviaWeb.PageView.render("game_questions.html", assigns) %>
+<div class="columns">
+  <div class="column">
+    <p class="tag is-warning">Score</p>
+  </div>
+</div>
+<%= for player <- @trivia.players do %>
+  <div class="columns">
+    <div class="column">
+      <%= player.name %> - <%= player.points %>
+    </div>
+  </div>
+<% end %>

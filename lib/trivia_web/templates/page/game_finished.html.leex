@@ -1,0 +1,23 @@
+  <div class="columns">
+    <p class="tag is-success">Winners</p>
+  </div>
+  <%= for player <- @trivia.winners do %>
+    <div class="columns">
+      <div class="column">
+        <%= player.name %> - <%= player.points %>
+      </div>
+    </div>
+  <% end %>
+  <div class="columns">
+    <p class="tag is-success">Q/A</p>
+  </div>
+  <div class="columns">
+    <div class="column">
+      <ol>
+      <%= for question <- @trivia.questions_with_answers do  %>
+        <li><%= Phoenix.HTML.raw question.text %> : <strong><%=
+Phoenix.HTML.raw question.answer %></strong></li>
+      <% end %>
+      </ol>
+    </div>
+  </div>

@@ -1,6 +1,5 @@
 <div class="container">
   <%= Phoenix.LiveView.live_render(@conn, TriviaWeb.Live.TriviaView, session: %{}) %>
-
 </div>
 
 

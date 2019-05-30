@@ -1,0 +1,18 @@
+<%= if @trivia.current_question do %>
+  <div class="columns">
+    <div class="column">
+      <p><strong><%= @trivia.used_questions+1 %>/<%=
+         @trivia.total_questions %></strong>
+      <%= Phoenix.HTML.raw @trivia.current_question.text %></p>
+    </div>
+  </div>
+  <%= if @player_info.waiting_response do %>
+    <%= for option <- @trivia.current_question.options do %>
+      <div class="columns">
+        <div class="column">
+          <button class="button is-primary is-small" phx-click="submit_answer" phx-value="<%= option %>"><%= Phoenix.HTML.raw option %></button>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
