@@ -24,22 +24,18 @@ question_2 =
   })
 
 game = Game.new(%{name: "game1", player: player_ruben})
-game = Game.add_question(game, question_1)
-game = Game.add_question(game, question_2)
+# game = Game.add_question(game, question_1)
+# game = Game.add_question(game, question_2)
 
 {:ok, game_pid} = GameServer.start_link(game)
 
 # GameServer.start_game(game_pid)
-
 # GameServer.add_player(game_pid, player_deisy)
 # GameServer.add_player(game_pid, player_sofia)
 # GameServer.add_player(game_pid, player_samuel)
-#
-#
-#
 
 start_servers = fn quantity ->
-  Enum.each(1..quantity, fn x ->
+  Enum.each(1..quantity, fn _iterator ->
     {:ok, pid} = Trivia.DynamicSupervisor.start_child(game)
     GameServer.start_game(pid)
   end)
