@@ -3,10 +3,9 @@ defmodule Trivia.Player do
   Module used to define a player for a trivia
   """
   defstruct name: '', points: 0, waiting_response: false
-  alias Trivia.Player
 
   @doc """
-  Returns a `Trivia.Player` Struct with the name populated.
+  Returns a `Trivia.Player` struct with the name populated.
 
   ## Examples:
 
@@ -15,6 +14,6 @@ defmodule Trivia.Player do
 
   """
   def new(name) when is_binary(name) do
-    %Player{name: name}
+    %__MODULE__{name: name}
   end
 end
