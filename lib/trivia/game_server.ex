@@ -1,6 +1,7 @@
 defmodule Trivia.GameServer do
   @moduledoc """
-  Maintain and control timer and messages for processes managing trivias.
+  Maintain the state of a `Trivia.Game` manage time and messages
+  for the process.
   """
   use GenServer, restart: :transient
 
