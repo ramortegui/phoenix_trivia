@@ -1,0 +1,7 @@
+<%= for player <- @trivia.players do %>
+  <div class="columns">
+    <div class="column">
+      <%= if player.name == @player_name, do: "👋" %><%= player.name %> - <%= player.points %>
+    </div>
+  </div>
+<% end %>
