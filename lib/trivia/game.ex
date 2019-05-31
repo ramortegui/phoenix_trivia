@@ -5,7 +5,6 @@ defmodule Trivia.Game do
   defstruct name: '',
             current_question: nil,
             questions: [],
-            questions_with_answers: [],
             players: [],
             status: '',
             winners: [],
@@ -55,7 +54,6 @@ defmodule Trivia.Game do
     |> decode_questions()
     |> parse_questions()
     |> add_questions(game)
-    |> set_questions_with_answers()
   end
 
   def request_questions do
@@ -101,75 +99,50 @@ defmodule Trivia.Game do
     %Game{game | questions: [question | questions], total_questions: total_questions + 1}
   end
 
-  def set_questions_with_answers(%Game{questions: questions} = game) do
-    %Game{game | questions_with_answers: questions}
-  end
-
-  def change_status(
-        %Game{status: status, players: players, questions: [question | questions]} = game
-      )
-      when status == "waiting" do
-    players = Enum.map(players, &%Player{&1 | waiting_response: true})
-
-    %Game{
-      game
-      | status: "playing",
-        players: players,
-        current_question: question,
-        questions: questions,
-        counter: @waiting_to_question,
-        counter_total: @waiting_to_question
-    }
-  end
-
   def change_status(%Game{status: status} = game)
-      when status == "finished" do
-    game = add_winners(game)
+      when status == "waiting" do
+    change_question(%Game{game | status: "playing"})
+  end
 
+  def change_status(%Game{status: status, current_question: current_question} = game)
+      when status == "playing" and is_nil(current_question) do
     %Game{
       game
-      | current_question: nil,
-        counter: @waiting_to_end_game,
-        counter_total: @waiting_to_end_game
+      | counter: @waiting_to_end_game,
+        counter_total: @waiting_to_end_game,
+        status: "finished"
     }
+    |> add_winners()
   end
 
   def change_status(%Game{status: status} = game)
       when status == "playing",
       do: game
 
-  def change_question(
-        %Game{
-          status: status,
-          questions: [first | rest],
-          players: players,
-          used_questions: used_questions
-        } = game
-      )
+  def change_question(%Game{status: status} = game)
       when status == "playing" do
-    players = Enum.map(players, &%Player{&1 | waiting_response: true})
-
-    %Game{
-      game
-      | current_question: first,
-        questions: rest,
-        players: players,
-        counter: @waiting_to_question,
-        counter_total: @waiting_to_question,
-        used_questions: used_questions + 1
-    }
+    game
+    |> enable_players_to_answer()
+    |> move_to_next_question()
+    |> change_status()
   end
 
-  def change_question(%Game{status: status, questions: [], used_questions: used_questions} = game)
-      when status == "playing" do
-    change_status(%Game{
-      game
-      | current_question: nil,
-        counter: 0,
-        counter_total: 0,
-        used_questions: used_questions + 1,
-        status: "finished"
-    })
+  def enable_players_to_answer(%Game{players: players} = game) do
+    players = Enum.map(players, &%Player{&1 | waiting_response: true})
+    %Game{game | players: players}
+  end
+
+  def move_to_next_question(%Game{questions: questions, used_questions: used_questions} = game) do
+    if used_questions == Enum.count(questions) do
+      %Game{game | current_question: nil}
+    else
+      %Game{
+        game
+        | current_question: Enum.at(questions, used_questions),
+          used_questions: used_questions + 1,
+          counter: @waiting_to_question
+      }
+    end
   end
 
   def decrement_counter(%Game{counter: counter} = game) do

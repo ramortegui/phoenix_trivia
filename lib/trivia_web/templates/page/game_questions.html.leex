@@ -1,7 +1,7 @@
 <%= if @trivia.current_question do %>
   <div class="columns">
     <div class="column">
-      <p><strong><%= @trivia.used_questions+1 %>/<%=
+      <p><strong><%= @trivia.used_questions %>/<%=
          @trivia.total_questions %></strong>
       <%= Phoenix.HTML.raw @trivia.current_question.text %></p>
     </div>
