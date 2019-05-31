@@ -20,8 +20,8 @@ defmodule Trivia.Game do
   alias Trivia.Question
 
   @waiting_to_subscribe 10
-  @waiting_to_question 15
-  @waiting_to_end_game 10
+  @waiting_to_question 10
+  @waiting_to_end_game 15
   @amount_of_questions 5
   @category 18
 
