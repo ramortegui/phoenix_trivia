@@ -3,20 +3,19 @@
     <progress id="progress-bar" class="progress is-info is-small"  value="<%= @trivia.counter %>" max="<%= @trivia.counter_total %>"></progress>
   </div>
 </div>
-
 <%= if @trivia != nil do %>
   <div class="columns">
     <div class="column">
       <p class="subtitle">Status: <%= @trivia.status %></p>
     </div>
   </div>
-  <%= if (@trivia.status == "playing") do %>
-    <%= TriviaWeb.PageView.render("game_playing.html", assigns) %>
-  <% end %>
-  <%= if (@trivia.status == "playing" or @trivia.status == "waiting") do %>
-    <%= TriviaWeb.PageView.render("game_players.html", assigns) %>
-  <% end %>
-  <%= if (@trivia.status == "finished") do %>
-    <%= TriviaWeb.PageView.render("game_finished.html", assigns) %>
+  <%= case @trivia.status do %>
+    <% "playing" -> %>
+      <%= TriviaWeb.PageView.render("game_playing.html", assigns) %>
+      <%= TriviaWeb.PageView.render("game_players.html", assigns) %>
+    <% "waiting" -> %>
+      <%= TriviaWeb.PageView.render("game_players.html", assigns) %>
+    <% "finished" -> %>
+      <%= TriviaWeb.PageView.render("game_finished.html", assigns) %>
   <% end %>
 <% end %>
