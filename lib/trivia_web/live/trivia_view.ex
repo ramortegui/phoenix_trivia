@@ -10,7 +10,7 @@ defmodule TriviaWeb.Live.TriviaView do
   end
 
   def mount(_session, socket) do
-    if(connected?(socket), do: :timer.send_interval(5, self(), :tick))
+    if(connected?(socket), do: :timer.send_interval(100, self(), :tick))
 
     player_name = "p_#{:rand.uniform(10_000_000_000)}"
 
@@ -83,14 +83,6 @@ defmodule TriviaWeb.Live.TriviaView do
       else
         socket
       end
-
-    {:noreply, socket}
-  end
-
-  def handle_event("return-main", _value, socket) do
-    socket =
-      socket
-      |> trivias()
 
     {:noreply, socket}
   end
