@@ -12,7 +12,6 @@ defmodule Trivia.DynamicSupervisor do
   end
 
   def start_child(%Game{} = game) do
-    # spec = %{id: MyWorker, start: {MyWorker, :start_link, [foo, bar,
     spec = {GameServer, game}
     DynamicSupervisor.start_child(__MODULE__, spec)
   end
