@@ -10,7 +10,7 @@
 <div class="columns is-multiline is-mobile">
   <%= for trivia <- @available_trivias do %>
     <div class="column is-one-fifth">
-      <button class="button is-info" phx-click="join_trivia" phx-value=<%= elem(trivia,0) %>>Join</button>
+      <button class="button is-info" phx-click="join_trivia" phx-value="<%= elem(trivia,0) %>">Join</button>
     </div>
   <% end %>
 </div>
