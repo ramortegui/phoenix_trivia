@@ -10,13 +10,13 @@
       <p class="subtitle">Status: <%= @trivia.status %></p>
     </div>
   </div>
-  <%= if (@trivia_status == "playing") do %>
+  <%= if (@trivia.status == "playing") do %>
     <%= TriviaWeb.PageView.render("game_playing.html", assigns) %>
   <% end %>
-  <%= if (@trivia_status == "playing" or @trivia_status == "waiting") do %>
+  <%= if (@trivia.status == "playing" or @trivia.status == "waiting") do %>
     <%= TriviaWeb.PageView.render("game_players.html", assigns) %>
   <% end %>
-  <%= if (@trivia_status == "finished") do %>
+  <%= if (@trivia.status == "finished") do %>
     <%= TriviaWeb.PageView.render("game_finished.html", assigns) %>
   <% end %>
 <% end %>

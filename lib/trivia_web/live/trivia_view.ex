@@ -20,7 +20,6 @@ defmodule TriviaWeb.Live.TriviaView do
         in_game: false,
         trivia: nil,
         process: nil,
-        trivia_status: nil,
         number_of_trivias: 0,
         number_of_available_trivias: 0,
         available_trivias: [],
@@ -50,7 +49,6 @@ defmodule TriviaWeb.Live.TriviaView do
         socket
         |> trivias()
         |> assign(:trivia, game)
-        |> assign(:trivia_status, game.status)
         |> player_info()
       end
     end
