@@ -5,7 +5,8 @@ defmodule Trivia.Question do
   defstruct text: "", options: [], answer: ""
 
   @doc """
-  Returns a `Trivia.Question` Struct with shuffled options, the answer is included as part of the options.
+  Returns a `Trivia.Question` Struct with shuffled options, the
+  answer is included as part of the options.
   """
   def new(%{text: text, options: options, answer: answer}) do
     shuffled_options = Enum.shuffle([answer | options])
