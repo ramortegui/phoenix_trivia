@@ -17,7 +17,6 @@ defmodule TriviaWeb.Live.TriviaView do
     socket =
       socket
       |> assign(
-        in_game: false,
         trivia: nil,
         process: nil,
         number_of_trivias: 0,
@@ -83,7 +82,6 @@ defmodule TriviaWeb.Live.TriviaView do
         |> player_info()
       else
         socket
-        |> assign(:in_game, false)
       end
 
     {:noreply, socket}
@@ -92,7 +90,6 @@ defmodule TriviaWeb.Live.TriviaView do
   def handle_event("return-main", _value, socket) do
     socket =
       socket
-      |> assign(:in_game, false)
       |> trivias()
 
     {:noreply, socket}
@@ -102,7 +99,6 @@ defmodule TriviaWeb.Live.TriviaView do
     socket
     |> assign(:trivia, GameServer.game(game_pid))
     |> assign(:process, game_pid)
-    |> assign(:in_game, true)
     |> player_info()
   end
 
@@ -110,7 +106,6 @@ defmodule TriviaWeb.Live.TriviaView do
     socket
     |> assign(:trivia, nil)
     |> assign(:process, nil)
-    |> assign(:in_game, false)
     |> assign(:player_info, nil)
     |> trivias()
   end

@@ -4,8 +4,8 @@
       <p class="subtitle">Player: <%= @player_name %></p>
     </div>
   </div>
-  <%= case @in_game do %>
-    <% true  -> %> <%= TriviaWeb.PageView.render("game.html", assigns) %>
-    <% false -> %> <%= TriviaWeb.PageView.render("lobby.html", assigns) %>
+  <%= case @trivia do %>
+    <% nil -> %> <%= TriviaWeb.PageView.render("lobby.html", assigns) %>
+    <% _ -> %> <%= TriviaWeb.PageView.render("game.html", assigns) %>
   <% end %>
 </div>
