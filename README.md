@@ -43,8 +43,7 @@ The player(s) with the higher score are the winners of the game.
 
 Trivia app is reactive, but I only use javascript to load a predefined libraries and config the app. :D.  [`https://github.com/phoenixframework/phoenix_live_view`](https://github.com/phoenixframework/phoenix_live_view) it's awesome!
 
-The application has been deployed in [`gigalixir`](https://www.gigalixir.com/) and can be
-found at: [`https://phx-trivia.gigalixirapp.com/`](https://phx-trivia.gigalixirapp.com/)
+The application can befound at: [`https://phx-trivia.gigalixirapp.com/`](https://phx-trivia.gigalixirapp.com/)
 
 To start your Phoenix server locally:
 
